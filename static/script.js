@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let imagesData = []; 
-    let currentIndex = 0; 
+    let imagesData = [];
+    let currentIndex = 0;
 
     // Lấy danh sách ảnh và câu hỏi
     fetch("/api/images")
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const imageContainer = document.getElementById("image-container");
         const qaContainer = document.getElementById("qa-container");
 
-        imageContainer.innerHTML = ""; // Xóa nội dung cũ
+        imageContainer.innerHTML = "";
         qaContainer.innerHTML = "";
 
         const [imageId, qaList] = imagesData[index];
@@ -29,32 +29,48 @@ document.addEventListener("DOMContentLoaded", function () {
         imgElement.src = `/images/${imageId}`;
         const imgName = document.createElement("h2");
         imgName.textContent = imageId;
-        
+
         imageContainer.appendChild(imgName);
         imageContainer.appendChild(imgElement);
 
-        // Hiển thị câu hỏi và câu trả lời
+        // Hiển thị danh sách câu hỏi
         qaList.forEach((qa, qaIndex) => {
             const qaItem = document.createElement("div");
             qaItem.classList.add("qa-item");
 
+            // Ô nhập câu hỏi
             const question = document.createElement("textarea");
-            question.classList.add("answer-input");
-            question.innerText = qa.Question;
+            question.classList.add("question-input");
+            question.value = qa.Question;
             qaItem.appendChild(question);
 
+            // Ô nhập câu trả lời
             const answerInput = document.createElement("textarea");
             answerInput.classList.add("answer-input");
             answerInput.value = qa.Answer;
-            answerInput.dataset.imageId = imageId;
-            answerInput.dataset.qaIndex = qaIndex;
             qaItem.appendChild(answerInput);
 
+            // Hiển thị Explanation (chỉ đọc)
+            const explanation = document.createElement("textarea");
+            explanation.textContent = qa.Explanation;
+            explanation.classList.add("explanation-input");
+            qaItem.appendChild(explanation);
+
+            // Checkbox Modified
+            const modifiedLabel = document.createElement("label");
+            modifiedLabel.textContent = "Modified: ";
+            const modifiedCheckbox = document.createElement("input");
+            modifiedCheckbox.type = "checkbox";
+            modifiedCheckbox.checked = qa.Modified === "Yes";
+            qaItem.appendChild(modifiedLabel);
+            qaItem.appendChild(modifiedCheckbox);
+
+            // Nút lưu
             const saveButton = document.createElement("button");
             saveButton.innerText = "Lưu";
             saveButton.classList.add("save-button");
             saveButton.addEventListener("click", function () {
-                updateAnswer(imageId, qaIndex, answerInput.value);
+                updateQA(imageId, qaIndex, question.value, answerInput.value, modifiedCheckbox.checked);
             });
 
             qaItem.appendChild(saveButton);
@@ -84,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("goto-button").addEventListener("click", function () {
         const indexInput = document.getElementById("image-index-input").value;
         const newIndex = parseInt(indexInput, 10) - 1;
-        console.log( imagesData.length);
         if (!isNaN(newIndex) && newIndex >= 0 && newIndex < imagesData.length) {
             currentIndex = newIndex;
             loadImage(currentIndex);
@@ -93,14 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Cập nhật câu trả lời
-    function updateAnswer(imageId, qaIndex, newAnswer) {
-        fetch(`/api/update-answer/${imageId}/${qaIndex}`, {
+    // Cập nhật dữ liệu
+    function updateQA(imageId, qaIndex, newQuestion, newAnswer, modified) {
+        fetch(`/api/update-qa/${imageId}/${qaIndex}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ answer: newAnswer })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: newQuestion, answer: newAnswer, modified: modified })
         })
         .then(response => response.json())
         .then(data => {
