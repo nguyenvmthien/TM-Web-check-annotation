@@ -118,3 +118,18 @@ button:hover {
 .save-button:hover {
     background-color: #218838;
 }
+
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+}

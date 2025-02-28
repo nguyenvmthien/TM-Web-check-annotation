@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const explanation = document.createElement("textarea");
             explanation.textContent = qa.Explanation;
             explanation.classList.add("explanation-input");
+            explanation.setAttribute("readonly", true);
             qaItem.appendChild(explanation);
 
             // Checkbox Modified
@@ -73,7 +74,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateQA(imageId, qaIndex, question.value, answerInput.value, modifiedCheckbox.checked);
             });
 
+            // Nút xóa
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "Xóa";
+            deleteButton.classList.add("delete-button");
+            deleteButton.addEventListener("click", function () {
+                deleteQA(imageId, qaIndex);
+            });
+
             qaItem.appendChild(saveButton);
+            qaItem.appendChild(deleteButton);
             qaContainer.appendChild(qaItem);
         });
 
@@ -118,6 +128,21 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
+        });
+    }
+
+    // Xóa dữ liệu
+    function deleteQA(imageId, qaIndex) {
+        if (!confirm("Bạn có chắc chắn muốn xóa câu hỏi này?")) return;
+
+        fetch(`/api/delete-qa/${imageId}/${qaIndex}`, {
+            method: "DELETE"
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            imagesData = imagesData.map(([id, qas]) => id === imageId ? [id, qas.filter((_, i) => i !== qaIndex)] : [id, qas]);
+            loadImage(currentIndex);
         });
     }
 });

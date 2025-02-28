@@ -49,7 +49,7 @@ def update_qa(image_id, qa_index):
         # Cập nhật câu hỏi nếu có thay đổi
         if new_question is not None and new_question != old_question:
             data[image_id][qa_index]["Question"] = new_question
-            modified = True
+            modified = False
 
         # Cập nhật câu trả lời nếu có thay đổi
         if new_answer is not None and new_answer != old_answer:
@@ -67,6 +67,24 @@ def update_qa(image_id, qa_index):
             return jsonify({"message": "✅ Cập nhật thành công!"})
 
         return jsonify({"message": "Không có thay đổi nào được thực hiện."})
+
+    return jsonify({"error": "Không tìm thấy dữ liệu!"}), 404
+
+# ✅ API xóa một object QA
+@app.route("/api/delete-qa/<image_id>/<int:qa_index>", methods=["DELETE"])
+def delete_qa(image_id, qa_index):
+    data = load_data()
+
+    if image_id in data and 0 <= qa_index < len(data[image_id]):
+        del data[image_id][qa_index]  # Xóa object QA
+        data[image_id] = [qa for qa in data[image_id] if qa]  # Loại bỏ object rỗng
+
+        # Nếu danh sách QA của ảnh đó rỗng, xóa luôn entry image_id
+        if not data[image_id]:
+            del data[image_id]
+
+        save_data(data)
+        return jsonify({"message": "🗑️ Đã xóa thành công!"})
 
     return jsonify({"error": "Không tìm thấy dữ liệu!"}), 404
 
