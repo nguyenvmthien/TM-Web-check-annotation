@@ -49,7 +49,7 @@ def update_qa(image_id, qa_index):
         # Cập nhật câu hỏi nếu có thay đổi
         if new_question is not None and new_question != old_question:
             data[image_id][qa_index]["Question"] = new_question
-            modified = False
+            modified = True
 
         # Cập nhật câu trả lời nếu có thay đổi
         if new_answer is not None and new_answer != old_answer:
