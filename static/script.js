@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const question = document.createElement("textarea");
             question.classList.add("answer-input");
-            question.innerText = `Câu hỏi: ${qa.Question}`;
+            question.innerText = qa.Question;
             qaItem.appendChild(question);
 
             const answerInput = document.createElement("textarea");
