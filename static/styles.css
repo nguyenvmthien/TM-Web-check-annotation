@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    margin: 20px 0;
+    color: #333;
+}
+
+/* Layout chính */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 70%;
+    margin: auto;
+}
+
+/* Khu vực ảnh */
+.image-section {
+    flex: 1;
+    text-align: center;
+}
+
+.image-section img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Khu vực câu hỏi */
+.qa-section {
+    flex: 1;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    max-height: 100%;  /* Giới hạn chiều cao của khu vực câu hỏi */
+    overflow-y: auto;   /* Cho phép cuộn dọc khi nội dung quá dài */
+}
+
+.qa-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.qa-item p {
+    font-weight: bold;
+}
+
+/* Textbox */
+.answer-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    min-height: 30px; /* Chiều cao tối thiểu cho textbox */
+    resize: vertical;  /* Cho phép người dùng thay đổi chiều cao */
+    transition: all 0.3s ease;
+    word-wrap: break-word;  /* Chia từ khi cần thiết */
+    overflow-y: auto;  /* Cho phép cuộn dọc nếu nội dung quá dài */
+}
+
+/* Khi focus vào textbox */
+.answer-input:focus {
+    border-color: #007bff;
+    background-color: #e6f7ff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Nút điều hướng */
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Thêm padding cho nút Lưu */
+.save-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
