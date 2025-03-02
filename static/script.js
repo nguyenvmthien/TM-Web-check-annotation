@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const explanation = document.createElement("textarea");
             explanation.textContent = qa.Explanation;
             explanation.classList.add("explanation-input");
-            explanation.setAttribute("readonly", true);
             qaItem.appendChild(explanation);
 
             // Checkbox Modified
