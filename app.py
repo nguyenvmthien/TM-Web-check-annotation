@@ -40,10 +40,11 @@ def update_qa(image_id, qa_index):
         new_question = request.json.get("question", None)
         new_answer = request.json.get("answer", None)
         new_modified = request.json.get("modified", False)
+        new_explanation = request.json.get("explanation", None) #
 
         old_question = data[image_id][qa_index]["Question"]
         old_answer = data[image_id][qa_index]["Answer"]
-
+        old_explanation = data[image_id][qa_index]["Explanation"] #
         modified = False
 
         # Cập nhật câu hỏi nếu có thay đổi
@@ -54,6 +55,11 @@ def update_qa(image_id, qa_index):
         # Cập nhật câu trả lời nếu có thay đổi
         if new_answer is not None and new_answer != old_answer:
             data[image_id][qa_index]["Answer"] = new_answer
+            modified = True
+
+        # Cập nhật câu giải thích nếu có thay đổi
+        if new_explanation is not None and new_explanation != old_explanation:
+            data[image_id][qa_index]["Explanation"] = new_explanation
             modified = True
 
         # Cập nhật trường Modified từ checkbox

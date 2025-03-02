@@ -50,10 +50,12 @@ document.addEventListener("DOMContentLoaded", function () {
             answerInput.value = qa.Answer;
             qaItem.appendChild(answerInput);
 
-            // Hiển thị Explanation (chỉ đọc)
+            // Ô nhập explaination
             const explanation = document.createElement("textarea");
-            explanation.textContent = qa.Explanation;
             explanation.classList.add("explanation-input");
+            // explanation.textContent = qa.Explanation;
+            explanation.value = qa.Explanation;
+            // explanation.setAttribute("readonly", true);
             qaItem.appendChild(explanation);
 
             // Checkbox Modified
@@ -70,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
             saveButton.innerText = "Lưu";
             saveButton.classList.add("save-button");
             saveButton.addEventListener("click", function () {
-                updateQA(imageId, qaIndex, question.value, answerInput.value, modifiedCheckbox.checked);
+                updateQA(imageId, qaIndex, question.value, answerInput.value,explanation.value, modifiedCheckbox.checked);
             });
 
             // Nút xóa
@@ -118,16 +120,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Cập nhật dữ liệu
-    function updateQA(imageId, qaIndex, newQuestion, newAnswer, modified) {
+    function updateQA(imageId, qaIndex, newQuestion, newAnswer, newExplanation, modified) {
         fetch(`/api/update-qa/${imageId}/${qaIndex}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ question: newQuestion, answer: newAnswer, modified: modified })
+            body: JSON.stringify({ question: newQuestion, answer: newAnswer, explanation: newExplanation,  modified: modified })
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        });
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            });
     }
 
     // Xóa dữ liệu
@@ -137,11 +139,11 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/api/delete-qa/${imageId}/${qaIndex}`, {
             method: "DELETE"
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            imagesData = imagesData.map(([id, qas]) => id === imageId ? [id, qas.filter((_, i) => i !== qaIndex)] : [id, qas]);
-            loadImage(currentIndex);
-        });
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                imagesData = imagesData.map(([id, qas]) => id === imageId ? [id, qas.filter((_, i) => i !== qaIndex)] : [id, qas]);
+                loadImage(currentIndex);
+            });
     }
 });
